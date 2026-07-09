@@ -225,6 +225,16 @@
   .filters input{flex:1; min-width:180px;}
   .filters .count{font-size:12px; color:var(--muted); align-self:center; margin-left:auto; white-space:nowrap;}
 
+  /* ---------- pagination ---------- */
+  .pagination{display:flex; align-items:center; gap:10px; justify-content:center; margin-top:16px; font-size:13px;}
+  .pagination button{
+    background:var(--surface); border:1px solid var(--border); color:var(--text);
+    border-radius:7px; padding:6px 12px; font-size:13px; font-family:inherit; cursor:pointer;
+  }
+  .pagination button:hover:not(:disabled){background:var(--accent-wash); border-color:var(--accent-wash-strong);}
+  .pagination button:disabled{opacity:0.4; cursor:default;}
+  .pagination .pageinfo{color:var(--muted); font-family:"IBM Plex Mono", monospace; font-size:12.5px;}
+
   /* ---------- table ---------- */
   .table-scroll{overflow-x:auto; border:1px solid var(--border-soft); border-radius:var(--radius);}
   table{width:100%; border-collapse:collapse; font-size:13px; min-width:980px;}
@@ -448,6 +458,7 @@
         </tbody>
       </table>
     </div>
+    <div class="pagination" id="appsPagination"></div>
   </div>
 </section>
 
@@ -540,6 +551,7 @@
         </tbody>
       </table>
     </div>
+    <div class="pagination" id="samplePagination"></div>
   </div>
 </section>
 
@@ -705,51 +717,86 @@ function renderTable(apps){
   applyFilters();
 }
 
+const APPS_PAGE_SIZE = 10;
+let FILTERED_APPS = [];
+let appsPage = 1;
+
+function appRowHtml(a){
+  if(a.error){
+    return `<tr class="errrow" data-id="${a.id}"><td class="mono">${a.id}</td><td class="appname">${a.name}</td><td>${a.category||''}</td>
+      <td colspan="8">Research failed: ${a.error}</td></tr>`;
+  }
+  const auth = (a.auth_methods||[]).map(m=>`<span class="pill pill-neutral">${m}</span>`).join(' ');
+  const surface = a.api_surface ? `${a.api_surface.type||''}` : '';
+  const mcp = a.api_surface && a.api_surface.mcp_exists
+    ? `<span class="pill pill-good"><i class="dot"></i>yes</span>`
+    : `<span class="pill pill-unknown"><i class="dot"></i>no</span>`;
+  const evidence = (a.evidence||[]);
+  const evLink = evidence.length
+    ? `<a href="${evidence[0].url}" target="_blank" rel="noopener" class="mono">source</a>${evidence.length>1?` <span style="color:var(--muted)">+${evidence.length-1}</span>`:''}`
+    : '<span style="color:var(--muted)">—</span>';
+  return `<tr data-id="${a.id}">
+    <td class="mono">${a.id}</td>
+    <td class="appname">${a.name}</td>
+    <td>${a.category||''}</td>
+    <td class="oneliner" title="${(a.one_liner||'').replace(/"/g,'&quot;')}">${truncate(a.one_liner, 90)}</td>
+    <td>${auth || '<span class="pill pill-unknown"><i class="dot"></i>unknown</span>'}</td>
+    <td>${pillFor(a.self_serve,'self_serve')}</td>
+    <td class="mono">${surface}</td>
+    <td>${mcp}</td>
+    <td>${pillFor(a.buildability_verdict,'buildability')}</td>
+    <td class="evidence">${evLink}</td>
+    <td class="conf">${a.confidence!=null ? a.confidence.toFixed(2) : '—'}</td>
+  </tr>`;
+}
+
+function renderPaginationControls(container, page, totalPages, onChange){
+  if(totalPages <= 1){ container.innerHTML = ''; return; }
+  container.innerHTML = `
+    <button data-action="prev" ${page<=1?'disabled':''}>&larr; Prev</button>
+    <span class="pageinfo">Page ${page} of ${totalPages}</span>
+    <button data-action="next" ${page>=totalPages?'disabled':''}>Next &rarr;</button>
+  `;
+  container.querySelector('[data-action="prev"]').onclick = () => onChange(page-1);
+  container.querySelector('[data-action="next"]').onclick = () => onChange(page+1);
+}
+
+function renderAppsPage(){
+  const tbody = document.getElementById('appstable');
+  const totalPages = Math.max(1, Math.ceil(FILTERED_APPS.length / APPS_PAGE_SIZE));
+  appsPage = Math.min(Math.max(1, appsPage), totalPages);
+
+  if(!FILTERED_APPS.length){
+    tbody.innerHTML = '<tr><td colspan="11" class="empty-state">No apps match these filters.</td></tr>';
+    document.getElementById('appsPagination').innerHTML = '';
+    return;
+  }
+  const start = (appsPage-1) * APPS_PAGE_SIZE;
+  const pageRows = FILTERED_APPS.slice(start, start + APPS_PAGE_SIZE);
+  tbody.innerHTML = pageRows.map(appRowHtml).join('');
+
+  renderPaginationControls(document.getElementById('appsPagination'), appsPage, totalPages, (newPage) => {
+    appsPage = newPage;
+    renderAppsPage();
+    document.getElementById('apps').scrollIntoView({ block: 'start' });
+  });
+}
+
 function applyFilters(){
   const q = document.getElementById('searchbox').value.trim().toLowerCase();
   const cat = document.getElementById('categoryfilter').value;
   const ss = document.getElementById('selfservefilter').value;
   const build = document.getElementById('buildabilityfilter').value;
-  const rows = ALL_APPS.filter(a => {
+  FILTERED_APPS = ALL_APPS.filter(a => {
     if(q && !(a.name||'').toLowerCase().includes(q)) return false;
     if(cat && a.category !== cat) return false;
     if(ss && a.self_serve !== ss) return false;
     if(build && a.buildability_verdict !== build) return false;
     return true;
   });
-  document.getElementById('rowcount').textContent = `${rows.length} / ${ALL_APPS.length} apps`;
-
-  const tbody = document.getElementById('appstable');
-  if(!rows.length){ tbody.innerHTML = '<tr><td colspan="11" class="empty-state">No apps match these filters.</td></tr>'; return; }
-
-  tbody.innerHTML = rows.map(a => {
-    if(a.error){
-      return `<tr class="errrow" data-id="${a.id}"><td class="mono">${a.id}</td><td class="appname">${a.name}</td><td>${a.category||''}</td>
-        <td colspan="8">Research failed: ${a.error}</td></tr>`;
-    }
-    const auth = (a.auth_methods||[]).map(m=>`<span class="pill pill-neutral">${m}</span>`).join(' ');
-    const surface = a.api_surface ? `${a.api_surface.type||''}` : '';
-    const mcp = a.api_surface && a.api_surface.mcp_exists
-      ? `<span class="pill pill-good"><i class="dot"></i>yes</span>`
-      : `<span class="pill pill-unknown"><i class="dot"></i>no</span>`;
-    const evidence = (a.evidence||[]);
-    const evLink = evidence.length
-      ? `<a href="${evidence[0].url}" target="_blank" rel="noopener" class="mono">source</a>${evidence.length>1?` <span style="color:var(--muted)">+${evidence.length-1}</span>`:''}`
-      : '<span style="color:var(--muted)">—</span>';
-    return `<tr data-id="${a.id}">
-      <td class="mono">${a.id}</td>
-      <td class="appname">${a.name}</td>
-      <td>${a.category||''}</td>
-      <td class="oneliner" title="${(a.one_liner||'').replace(/"/g,'&quot;')}">${truncate(a.one_liner, 90)}</td>
-      <td>${auth || '<span class="pill pill-unknown"><i class="dot"></i>unknown</span>'}</td>
-      <td>${pillFor(a.self_serve,'self_serve')}</td>
-      <td class="mono">${surface}</td>
-      <td>${mcp}</td>
-      <td>${pillFor(a.buildability_verdict,'buildability')}</td>
-      <td class="evidence">${evLink}</td>
-      <td class="conf">${a.confidence!=null ? a.confidence.toFixed(2) : '—'}</td>
-    </tr>`;
-  }).join('');
+  document.getElementById('rowcount').textContent = `${FILTERED_APPS.length} / ${ALL_APPS.length} apps`;
+  appsPage = 1;
+  renderAppsPage();
 }
 
 ['searchbox','categoryfilter','selfservefilter','buildabilityfilter'].forEach(id=>{
@@ -847,12 +894,39 @@ function renderAccuracy(report, pass12Summary){
   items[2].textContent = (delta>=0?'+':'') + delta + 'pp';
 }
 
-function renderSampleTable(sample){
+const SAMPLE_APPS_PER_PAGE = 5;
+let SAMPLE_APP_GROUPS = [];
+let samplePage = 1;
+
+function renderSamplePage(){
   const tbody = document.getElementById('sampletable');
-  if(!sample || !sample.length){ tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Run `python -m agent.cli sample` and fill in human_verdict.</td></tr>'; return; }
+  const totalPages = Math.max(1, Math.ceil(SAMPLE_APP_GROUPS.length / SAMPLE_APPS_PER_PAGE));
+  samplePage = Math.min(Math.max(1, samplePage), totalPages);
+
+  if(!SAMPLE_APP_GROUPS.length){
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Sample drawn, but human_verdict not filled in yet.</td></tr>';
+    document.getElementById('samplePagination').innerHTML = '';
+    return;
+  }
+  const start = (samplePage-1) * SAMPLE_APPS_PER_PAGE;
+  const pageGroups = SAMPLE_APP_GROUPS.slice(start, start + SAMPLE_APPS_PER_PAGE);
+  tbody.innerHTML = pageGroups.map(g => g.rowsHtml.join('')).join('');
+
+  renderPaginationControls(document.getElementById('samplePagination'), samplePage, totalPages, (newPage) => {
+    samplePage = newPage;
+    renderSamplePage();
+    document.getElementById('verification').scrollIntoView({ block: 'start' });
+  });
+}
+
+function renderSampleTable(sample){
+  if(!sample || !sample.length){
+    document.getElementById('sampletable').innerHTML = '<tr><td colspan="7" class="empty-state">Run `python -m agent.cli sample` and fill in human_verdict.</td></tr>';
+    return;
+  }
   const FIELDS = ['auth_methods','self_serve','buildability_verdict','mcp_exists'];
-  let rows = [];
-  sample.forEach(entry => {
+  SAMPLE_APP_GROUPS = sample.map(entry => {
+    const rowsHtml = [];
     FIELDS.forEach(field => {
       const p1 = entry.pass1_claim ? entry.pass1_claim[field] : null;
       const pf = entry.final_claim ? entry.final_claim[field] : null;
@@ -861,15 +935,18 @@ function renderSampleTable(sample){
       const norm = v => Array.isArray(v) ? [...v].sort().join(', ') : (v ?? '—');
       const p1match = norm(p1) === norm(human);
       const pfmatch = norm(pf) === norm(human);
-      rows.push(`<tr>
+      rowsHtml.push(`<tr>
         <td>${entry.name}</td><td class="mono">${field}</td>
         <td class="mono">${norm(p1)}</td><td class="mono">${norm(pf)}</td><td class="mono">${norm(human)}</td>
         <td class="${p1match?'match-yes':'match-no'}">${p1match?'✓':'✗'}</td>
         <td class="${pfmatch?'match-yes':'match-no'}">${pfmatch?'✓':'✗'}</td>
       </tr>`);
     });
-  });
-  tbody.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="7" class="empty-state">Sample drawn, but human_verdict not filled in yet.</td></tr>';
+    return { name: entry.name, rowsHtml };
+  }).filter(g => g.rowsHtml.length);
+
+  samplePage = 1;
+  renderSamplePage();
 }
 
 async function main(){
