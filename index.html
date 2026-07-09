@@ -639,11 +639,11 @@ function renderSampleTable(sample){
 
 async function main(){
   const [finalData, patterns, accuracyReport, pass12Summary, sample] = await Promise.all([
-    loadJSON('../data/final.json'),
-    loadJSON('../data/patterns.json'),
-    loadJSON('../verification/accuracy_report.json'),
-    loadJSON('../verification/pass1_vs_pass2_summary.json'),
-    loadJSON('../verification/human_sample.json'),
+    loadJSON('data/final.json'),
+    loadJSON('data/patterns.json'),
+    loadJSON('verification/accuracy_report.json'),
+    loadJSON('verification/pass1_vs_pass2_summary.json'),
+    loadJSON('verification/human_sample.json'),
   ]);
   renderStatband(patterns);
   renderAuthBars(patterns);
