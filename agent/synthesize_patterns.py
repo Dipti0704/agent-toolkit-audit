@@ -77,6 +77,34 @@ def build_patterns(records: list[dict]) -> dict:
         if r.get("self_serve") == "free_self_serve" and r.get("buildability_verdict") == "buildable_today"
     ]
 
+    # The mirror image of easy wins: gated on credentials, but not otherwise blocked --
+    # these are worth a partnership/outreach conversation rather than a dead end.
+    GATED_STATES = {"paid_plan_gated", "admin_approval_gated", "partner_contact_sales"}
+    needs_outreach = [
+        r["name"]
+        for r in valid
+        if r.get("self_serve") in GATED_STATES and r.get("buildability_verdict") != "blocked"
+    ]
+
+    total_valid = len(valid) or 1
+    top_auth_name, top_auth_count = auth_counter.most_common(1)[0] if auth_counter else ("Unknown", 0)
+    most_gated_category = max(category_summary.items(), key=lambda kv: kv[1]["gated_pct"], default=(None, None))
+    top_blocker_name, top_blocker_count = blocker_counter.most_common(1)[0] if blocker_counter else ("Unknown", 0)
+
+    headline_insights = [
+        f"{top_auth_name} dominates auth -- {top_auth_count} of {len(valid)} apps support it, "
+        "often alongside a second method.",
+        f"{len(easy_wins)} apps are free self-serve AND buildable today -- start there, no outreach needed.",
+        f"{len(needs_outreach)} more are gated but not blocked -- worth a partnership conversation, not a dead end.",
+        f"{mcp_exists_count} of {len(valid)} apps already have a real MCP server -- the rest are the actual opportunity.",
+    ]
+    if most_gated_category[0]:
+        headline_insights.insert(
+            2,
+            f"{most_gated_category[0]} is the most gated category "
+            f"({round(most_gated_category[1]['gated_pct'] * 100)}% of its apps).",
+        )
+
     return {
         "total_apps": len(records),
         "researched_ok": len(valid),
@@ -90,6 +118,9 @@ def build_patterns(records: list[dict]) -> dict:
         "category_summary": category_summary,
         "easy_wins": easy_wins,
         "easy_win_count": len(easy_wins),
+        "needs_outreach": needs_outreach,
+        "needs_outreach_count": len(needs_outreach),
+        "headline_insights": headline_insights,
     }
 
 

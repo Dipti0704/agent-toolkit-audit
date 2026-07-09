@@ -101,6 +101,55 @@
   .hero h1{font-size:clamp(28px, 4vw, 40px); line-height:1.15; max-width:820px;}
   .hero .lede{margin-top:16px; font-size:16px; color:var(--text-2); max-width:680px;}
 
+  /* ---------- key takeaways ---------- */
+  .takeaways{
+    margin-top:28px; display:grid; gap:10px;
+  }
+  .takeaway-row{
+    display:flex; align-items:flex-start; gap:12px; padding:14px 16px;
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .takeaway-row .mark{
+    flex:none; width:22px; height:22px; border-radius:50%; background:var(--accent-wash);
+    display:flex; align-items:center; justify-content:center; margin-top:1px;
+  }
+  .takeaway-row .mark svg{width:12px; height:12px; display:block;}
+  .takeaway-row p{font-size:14.5px; color:var(--text); line-height:1.45;}
+  .takeaway-row strong{color:var(--accent);}
+
+  /* ---------- donut ---------- */
+  .donut-wrap{display:flex; align-items:center; gap:22px; padding:20px; flex-wrap:wrap;}
+  .donut{
+    width:132px; height:132px; border-radius:50%; flex:none; position:relative;
+    background:conic-gradient(var(--muted) 0turn 1turn); /* JS overwrites this */
+  }
+  .donut::after{
+    content:''; position:absolute; inset:16px; border-radius:50%; background:var(--surface);
+  }
+  .donut-center{
+    position:absolute; inset:16px; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .donut-center .big{font-family:"IBM Plex Mono", monospace; font-size:22px; font-weight:600; color:var(--text);}
+  .donut-center .small{font-size:10px; color:var(--muted); text-transform:uppercase; letter-spacing:0.04em;}
+  .donut-legend{display:flex; flex-direction:column; gap:8px; font-size:13px;}
+  .donut-legend .row{display:flex; align-items:center; gap:8px;}
+  .donut-legend .row b{font-family:"IBM Plex Mono", monospace; margin-left:auto; padding-left:16px;}
+
+  /* ---------- verify layers ---------- */
+  .verify-layers{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px;}
+  @media (max-width:780px){ .verify-layers{grid-template-columns:1fr;} }
+  .verify-layer{
+    background:var(--surface); border:1px solid var(--border-soft); border-radius:var(--radius);
+    padding:16px; box-shadow:var(--shadow);
+  }
+  .verify-layer .step{
+    font-family:"IBM Plex Mono", monospace; font-size:11px; font-weight:600; color:var(--accent);
+    text-transform:uppercase; letter-spacing:0.05em;
+  }
+  .verify-layer h4{font-size:14px; margin:6px 0 4px;}
+  .verify-layer p{font-size:12.5px; color:var(--text-2); line-height:1.5;}
+
   /* ---------- stat band ---------- */
   .statband{
     display:grid; grid-template-columns:repeat(5, 1fr); gap:1px;
@@ -264,6 +313,7 @@
       <div class="stat"><div class="num">—</div><div class="label">already have an MCP server</div></div>
       <div class="stat"><div class="num">—</div><div class="label">defeated the agent outright</div></div>
     </div>
+    <div class="takeaways" id="takeaways"></div>
   </div>
 </div>
 
@@ -273,7 +323,12 @@
       <h2>The patterns</h2>
       <span class="sub">What the 100 rows add up to — not just a table.</span>
     </div>
-    <div class="grid2">
+    <div class="card donut-wrap">
+      <div class="donut" id="donut"><div class="donut-center"><div class="big" id="donutBig">—</div><div class="small">self-serve</div></div></div>
+      <div class="donut-legend" id="donutLegend"></div>
+    </div>
+
+    <div class="grid2" style="margin-top:20px;">
       <div class="card barchart">
         <h3 style="font-size:14px; padding:0 0 4px;">Auth method distribution</h3>
         <span style="font-size:12px; color:var(--muted); display:block; margin-bottom:10px;">
@@ -298,15 +353,16 @@
     <div class="twocol-list" style="margin-top:20px;">
       <div class="card list-card">
         <h3>Easy wins</h3>
-        <span class="sub">Free self-serve credentials + buildable today. Start here.</span>
+        <span class="sub">Free self-serve credentials + buildable today. Start here — no outreach needed.</span>
         <div class="chip-wrap" id="easywins"></div>
       </div>
       <div class="card list-card">
-        <h3>Where the agent got defeated</h3>
-        <span class="sub">Said so honestly instead of guessing.</span>
-        <div class="chip-wrap" id="failedapps"></div>
+        <h3>Needs outreach</h3>
+        <span class="sub">Gated on credentials, but not otherwise blocked. Worth a partnership conversation.</span>
+        <div class="chip-wrap" id="needsoutreach"></div>
       </div>
     </div>
+    <p style="margin-top:14px; font-size:12.5px; color:var(--muted);" id="failedapps"></p>
   </div>
 </section>
 
@@ -403,6 +459,24 @@
       <span class="sub">Accuracy, shown honestly — including where the agent was wrong.</span>
     </div>
 
+    <div class="verify-layers">
+      <div class="verify-layer">
+        <span class="step">Layer 1 · Agent</span>
+        <h4>Independent re-research</h4>
+        <p>Every app is re-researched from scratch in a fresh session with no exposure to pass 1's answers, then diffed field by field.</p>
+      </div>
+      <div class="verify-layer">
+        <span class="step">Layer 2 · Browser-use</span>
+        <h4>Independent doc fetch</h4>
+        <p>A separate agent fetches each sampled app's real docs directly and forms its own judgment — not just re-checking our pipeline's output.</p>
+      </div>
+      <div class="verify-layer">
+        <span class="step">Layer 3 · Human</span>
+        <h4>Hand-checked ground truth</h4>
+        <p>A fixed 20-app random sample, reviewed against real docs by a person. This is the only step that produces the real accuracy number below.</p>
+      </div>
+    </div>
+
     <div class="card accuracy-strip" id="accuracystrip">
       <div class="accuracy-item"><div class="v">—</div><div class="l">pass 1 only<br/>(human-checked)</div></div>
       <div class="accuracy-arrow">→</div>
@@ -486,6 +560,36 @@ function renderStatband(patterns){
   el.innerHTML = stats.map(([num,label]) => `<div class="stat"><div class="num">${num}</div><div class="label">${label}</div></div>`).join('');
 }
 
+function renderTakeaways(patterns){
+  const el = document.getElementById('takeaways');
+  const insights = (patterns && patterns.headline_insights) || [];
+  if(!insights.length){ el.innerHTML = ''; return; }
+  const check = `<svg viewBox="0 0 12 12" fill="none"><path d="M2 6.2L4.8 9 10 3" stroke="var(--accent)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  el.innerHTML = insights.map(text => `<div class="takeaway-row"><span class="mark">${check}</span><p>${text}</p></div>`).join('');
+}
+
+function renderDonut(patterns){
+  const donut = document.getElementById('donut');
+  const big = document.getElementById('donutBig');
+  const legend = document.getElementById('donutLegend');
+  if(!patterns || !patterns.self_serve_distribution){ return; }
+  const dist = patterns.self_serve_distribution;
+  const total = patterns.researched_ok || Object.values(dist).reduce((a,b)=>a+b,0) || 1;
+  const selfServe = (dist.free_self_serve||0) + (dist.trial_self_serve||0);
+  const gated = (dist.paid_plan_gated||0) + (dist.admin_approval_gated||0) + (dist.partner_contact_sales||0);
+  const unknown = Math.max(0, total - selfServe - gated);
+
+  const pctSS = selfServe/total*360, pctG = gated/total*360;
+  donut.style.background = `conic-gradient(var(--good) 0deg ${pctSS}deg, var(--gated) ${pctSS}deg ${pctSS+pctG}deg, var(--unknown) ${pctSS+pctG}deg 360deg)`;
+  big.textContent = Math.round(selfServe/total*100) + '%';
+
+  legend.innerHTML = [
+    ['Self-serve (free/trial)', selfServe, 'var(--good)'],
+    ['Gated (paid/admin/partner)', gated, 'var(--gated)'],
+    ['Unknown', unknown, 'var(--unknown)'],
+  ].map(([label,count,color]) => `<div class="row"><i class="swatch" style="background:${color}"></i>${label}<b>${count}</b></div>`).join('');
+}
+
 function renderAuthBars(patterns){
   const el = document.getElementById('authbars');
   if(!patterns || !patterns.auth_method_distribution){ el.innerHTML = '<p class="empty-state">No data yet.</p>'; return; }
@@ -521,14 +625,19 @@ function renderGateRows(patterns){
 
 function renderLists(patterns){
   const wins = document.getElementById('easywins');
+  const outreach = document.getElementById('needsoutreach');
   const failed = document.getElementById('failedapps');
   if(!patterns){ return; }
   wins.innerHTML = (patterns.easy_wins||[]).length
     ? patterns.easy_wins.map(n=>`<span class="pill pill-neutral">${n}</span>`).join('')
     : '<span style="font-size:12px;color:var(--muted)">None yet — run the pipeline.</span>';
-  failed.innerHTML = (patterns.failed_apps||[]).length
-    ? patterns.failed_apps.map(n=>`<span class="pill pill-gated"><i class="dot"></i>${n}</span>`).join('')
-    : '<span style="font-size:12px;color:var(--muted)">Zero total failures so far.</span>';
+  outreach.innerHTML = (patterns.needs_outreach||[]).length
+    ? patterns.needs_outreach.map(n=>`<span class="pill pill-neutral">${n}</span>`).join('')
+    : '<span style="font-size:12px;color:var(--muted)">Nothing gated-but-buildable found.</span>';
+  const failedCount = (patterns.failed_apps||[]).length;
+  failed.textContent = failedCount
+    ? `Said so honestly: the agent was outright defeated on ${failedCount} app(s) — ${patterns.failed_apps.join(', ')}.`
+    : `Said so honestly: the agent was not outright defeated on any of the 100 apps (though see the accuracy numbers below — that's a different thing from being always right).`;
 }
 
 let ALL_APPS = [];
@@ -615,7 +724,7 @@ function renderAccuracy(report, pass12Summary){
 function renderSampleTable(sample){
   const tbody = document.getElementById('sampletable');
   if(!sample || !sample.length){ tbody.innerHTML = '<tr><td colspan="7" class="empty-state">Run `python -m agent.cli sample` and fill in human_verdict.</td></tr>'; return; }
-  const FIELDS = ['auth_methods','self_serve','buildability_verdict'];
+  const FIELDS = ['auth_methods','self_serve','buildability_verdict','mcp_exists'];
   let rows = [];
   sample.forEach(entry => {
     FIELDS.forEach(field => {
@@ -646,6 +755,8 @@ async function main(){
     loadJSON('verification/human_sample.json'),
   ]);
   renderStatband(patterns);
+  renderTakeaways(patterns);
+  renderDonut(patterns);
   renderAuthBars(patterns);
   renderGateRows(patterns);
   renderLists(patterns);

@@ -142,5 +142,35 @@
     "Devin",
     "YouTube Transcript"
   ],
-  "easy_win_count": 23
+  "easy_win_count": 23,
+  "needs_outreach": [
+    "DealCloud",
+    "Freshdesk",
+    "Pylon",
+    "Help Scout",
+    "Gladly",
+    "WhatsApp Business",
+    "Google Ads",
+    "LinkedIn Ads",
+    "Klaviyo",
+    "Pinterest",
+    "Salesforce Commerce Cloud",
+    "Squarespace",
+    "Ecwid",
+    "Ahrefs",
+    "Smartsheet",
+    "Binance",
+    "Brex",
+    "Ramp",
+    "PitchBook",
+    "Otter AI"
+  ],
+  "needs_outreach_count": 20,
+  "headline_insights": [
+    "OAuth2 dominates auth -- 77 of 100 apps support it, often alongside a second method.",
+    "23 apps are free self-serve AND buildable today -- start there, no outreach needed.",
+    "Support and Helpdesk is the most gated category (40% of its apps).",
+    "20 more are gated but not blocked -- worth a partnership conversation, not a dead end.",
+    "23 of 100 apps already have a real MCP server -- the rest are the actual opportunity."
+  ]
 }
