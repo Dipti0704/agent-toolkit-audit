@@ -39,8 +39,10 @@ agent/synthesize_patterns.py  pure aggregation (auth distribution, self-serve %
                                by category, most common blocker, easy wins) --
                                no LLM call, this is just Counter() over structured data
         v
-data/patterns.json  ->  site/index.html (the case-study deliverable)
+data/patterns.json  ->  docs/index.html (the case-study deliverable, served via GitHub Pages)
 ```
+
+**Live page:** https://dipti0704.github.io/agent-toolkit-audit/
 
 **Where a human was needed:** the LLM does the searching, fetching, and structured extraction; a
 human is required for (a) the final 20-app ground-truth check against real docs -- LLM-vs-LLM
