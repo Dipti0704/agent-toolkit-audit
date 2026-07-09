@@ -241,6 +241,47 @@
   td.evidence a{font-family:"IBM Mono", monospace; font-size:12px;}
   .conf{font-family:"IBM Plex Mono", monospace; font-size:12px; color:var(--muted);}
   .errrow td{color:var(--gated); font-style:italic;}
+  tbody tr[data-id]{cursor:pointer;}
+  tbody tr[data-id]:hover td{background:var(--accent-wash);}
+
+  /* ---------- app detail modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,12,15,0.55); backdrop-filter:blur(2px);
+    display:flex; align-items:center; justify-content:center; padding:24px; z-index:100;
+    opacity:0; pointer-events:none; transition:opacity 0.15s ease;
+  }
+  .modal-backdrop.open{opacity:1; pointer-events:auto;}
+  .modal{
+    background:var(--surface); border:1px solid var(--border); border-radius:14px;
+    box-shadow:0 20px 60px rgba(0,0,0,0.35); max-width:640px; width:100%; max-height:85vh;
+    display:flex; flex-direction:column; transform:translateY(8px) scale(0.98); transition:transform 0.15s ease;
+  }
+  .modal-backdrop.open .modal{transform:translateY(0) scale(1);}
+  .modal-header{
+    display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+    padding:20px 22px 16px; border-bottom:1px solid var(--border-soft); flex:none;
+  }
+  .modal-header h3{font-size:19px;}
+  .modal-header .cat{font-size:12.5px; color:var(--muted); margin-top:3px;}
+  .modal-close{
+    flex:none; width:30px; height:30px; border-radius:8px; border:1px solid var(--border-soft);
+    background:var(--surface-2); color:var(--text-2); font-size:16px; line-height:1; cursor:pointer;
+  }
+  .modal-close:hover{background:var(--gated-wash); color:var(--gated); border-color:transparent;}
+  .modal-body{padding:18px 22px 22px; overflow-y:auto;}
+  .modal-row{display:flex; gap:16px; padding:10px 0; border-bottom:1px solid var(--border-soft);}
+  .modal-row:last-of-type{border-bottom:none;}
+  .modal-row .k{flex:0 0 128px; font-size:11.5px; text-transform:uppercase; letter-spacing:0.04em; color:var(--muted); padding-top:2px;}
+  .modal-row .v{flex:1; font-size:13.5px; color:var(--text); line-height:1.5;}
+  .modal-row .v.mono{font-size:12.5px;}
+  .modal-evidence{margin:2px 0 0; padding-left:0; list-style:none;}
+  .modal-evidence li{margin-bottom:6px;}
+  .modal-evidence a{font-family:"IBM Plex Mono", monospace; font-size:12px; word-break:break-all;}
+  .modal-evidence .note{display:block; color:var(--text-2); font-size:12.5px; margin-top:2px;}
+  .modal-notes{
+    font-size:12.5px; color:var(--text-2); line-height:1.55; white-space:pre-wrap;
+    max-height:220px; overflow-y:auto; background:var(--surface-2); border-radius:8px; padding:10px 12px; margin-top:4px;
+  }
 
   /* ---------- agent architecture ---------- */
   .flow{display:flex; flex-wrap:wrap; gap:0; align-items:stretch; margin-top:8px;}
@@ -508,6 +549,19 @@
   </div>
 </footer>
 
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal" id="modalCard">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitle">—</h3>
+        <div class="cat" id="modalCategory"></div>
+      </div>
+      <button class="modal-close" id="modalClose" aria-label="Close">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
 <script>
 const CAT_COLORS = ['var(--cat-1)','var(--cat-2)','var(--cat-3)','var(--cat-4)','var(--cat-5)'];
 const AUTH_ORDER = ['OAuth2','API Key','Token/Bearer','Basic Auth','JWT','None / Public','Other','Unknown'];
@@ -670,7 +724,7 @@ function applyFilters(){
 
   tbody.innerHTML = rows.map(a => {
     if(a.error){
-      return `<tr class="errrow"><td class="mono">${a.id}</td><td class="appname">${a.name}</td><td>${a.category||''}</td>
+      return `<tr class="errrow" data-id="${a.id}"><td class="mono">${a.id}</td><td class="appname">${a.name}</td><td>${a.category||''}</td>
         <td colspan="8">Research failed: ${a.error}</td></tr>`;
     }
     const auth = (a.auth_methods||[]).map(m=>`<span class="pill pill-neutral">${m}</span>`).join(' ');
@@ -682,7 +736,7 @@ function applyFilters(){
     const evLink = evidence.length
       ? `<a href="${evidence[0].url}" target="_blank" rel="noopener" class="mono">source</a>${evidence.length>1?` <span style="color:var(--muted)">+${evidence.length-1}</span>`:''}`
       : '<span style="color:var(--muted)">—</span>';
-    return `<tr>
+    return `<tr data-id="${a.id}">
       <td class="mono">${a.id}</td>
       <td class="appname">${a.name}</td>
       <td>${a.category||''}</td>
@@ -701,6 +755,78 @@ function applyFilters(){
 ['searchbox','categoryfilter','selfservefilter','buildabilityfilter'].forEach(id=>{
   document.getElementById(id).addEventListener('input', applyFilters);
   document.getElementById(id).addEventListener('change', applyFilters);
+});
+
+function esc(text){
+  return (text==null ? '' : String(text)).replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function modalRow(label, valueHtml){
+  return `<div class="modal-row"><div class="k">${label}</div><div class="v">${valueHtml}</div></div>`;
+}
+
+function buildModalBody(a){
+  if(a.error){
+    return modalRow('Status', `<span class="pill pill-gated"><i class="dot"></i>research failed</span>`) +
+      modalRow('Error', `<span class="mono">${esc(a.error)}</span>`);
+  }
+  const auth = (a.auth_methods||[]).map(m=>`<span class="pill pill-neutral">${esc(m)}</span>`).join(' ')
+    || '<span class="pill pill-unknown"><i class="dot"></i>unknown</span>';
+  const surface = a.api_surface || {};
+  const mcpPill = surface.mcp_exists
+    ? `<span class="pill pill-good"><i class="dot"></i>yes</span>` : `<span class="pill pill-unknown"><i class="dot"></i>no</span>`;
+  const evidence = a.evidence || [];
+  const evidenceHtml = evidence.length
+    ? `<ul class="modal-evidence">${evidence.map(e => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.url)}</a>${e.note ? `<span class="note">${esc(e.note)}</span>` : ''}</li>`).join('')}</ul>`
+    : '<span style="color:var(--muted)">No evidence recorded.</span>';
+  const disagreements = (a.disagreements||[]).filter(d => d && d !== 'single_pass_only');
+
+  let html = '';
+  html += modalRow('What it does', esc(a.one_liner) || '<span style="color:var(--muted)">—</span>');
+  html += modalRow('Auth method(s)', auth);
+  html += modalRow('Self-serve', pillFor(a.self_serve,'self_serve') + (a.self_serve_notes ? `<div style="margin-top:6px;color:var(--text-2);font-size:12.5px;">${esc(a.self_serve_notes)}</div>` : ''));
+  html += modalRow('API surface', `<span class="mono">${esc(surface.type||'—')}</span> &nbsp; <span style="color:var(--text-2);">${esc(surface.breadth||'')}</span>`);
+  html += modalRow('MCP server?', mcpPill + (surface.mcp_notes ? `<div style="margin-top:6px;color:var(--text-2);font-size:12.5px;">${esc(surface.mcp_notes)}</div>` : ''));
+  html += modalRow('Buildability', pillFor(a.buildability_verdict,'buildability') + (a.blocker ? `<div style="margin-top:6px;color:var(--text-2);font-size:12.5px;"><strong>Blocker:</strong> ${esc(a.blocker)}</div>` : ''));
+  html += modalRow('Evidence', evidenceHtml);
+  html += modalRow('Confidence', `<span class="mono">${a.confidence!=null ? a.confidence.toFixed(2) : '—'}</span>`);
+  if(disagreements.length){
+    html += modalRow('Pass 1 vs 2 disagreed on', disagreements.map(d=>`<span class="pill pill-gated"><i class="dot"></i>${esc(d)}</span>`).join(' '));
+  }
+  if(a.researcher_notes){
+    html += modalRow('Research notes', `<div class="modal-notes">${esc(a.researcher_notes)}</div>`);
+  }
+  return html;
+}
+
+function openModal(app){
+  document.getElementById('modalTitle').textContent = app.name || 'Unknown app';
+  document.getElementById('modalCategory').textContent = app.category || '';
+  document.getElementById('modalBody').innerHTML = buildModalBody(app);
+  const backdrop = document.getElementById('modalBackdrop');
+  backdrop.classList.add('open');
+  document.getElementById('modalClose').focus();
+}
+
+function closeModal(){
+  document.getElementById('modalBackdrop').classList.remove('open');
+}
+
+document.getElementById('appstable').addEventListener('click', (e) => {
+  if(e.target.closest('a')) return; // let evidence links behave normally
+  const row = e.target.closest('tr[data-id]');
+  if(!row) return;
+  const app = ALL_APPS.find(a => String(a.id) === row.dataset.id);
+  if(app) openModal(app);
+});
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalBackdrop').addEventListener('click', (e) => {
+  if(e.target.id === 'modalBackdrop') closeModal();
+});
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'Escape') closeModal();
 });
 
 function renderAccuracy(report, pass12Summary){
