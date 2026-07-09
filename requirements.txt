@@ -1,0 +1,9 @@
+openai>=1.60.0
+# composio's next-gen SDK (session-free tools.get() API, OpenAI provider bundled
+# in-package) is still pre-release as of writing -- pin the exact rc, not a range,
+# since pip won't resolve pre-releases from a bare ">=" specifier. Check
+# https://pypi.org/project/composio/#history for a stable >=1.0.0 release later.
+composio==1.0.0rc10
+python-dotenv>=1.0.1
+pydantic>=2.7.0
+tenacity>=8.2.0
