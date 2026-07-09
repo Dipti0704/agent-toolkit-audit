@@ -1,0 +1,828 @@
+[
+  {
+    "id": 4,
+    "name": "Attio",
+    "hint": "attio.com",
+    "category": "CRM and Sales",
+    "pass1_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "API Key",
+        "Basic Auth"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "API Key",
+        "Basic Auth",
+        "Token/Bearer"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "evidence_urls": [
+      "https://docs.attio.com/rest-api/guides/authentication",
+      "https://docs.attio.com/rest-api/guides/authentication"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "OAuth2",
+        "API Key",
+        "Basic Auth",
+        "Token/Bearer"
+      ],
+      "self_serve": "paid_plan_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": true
+    },
+    "human_notes": "docs.attio.com confirms OAuth2/API Key/Basic Auth/Bearer. attio.com/pricing shows API+webhook access starts at the Plus plan ($36/mo) -- NOT on the free tier, so self_serve should be paid_plan_gated, not 'unknown' (both passes missed this). mcp_exists left as-is, not independently confirmed either way."
+  },
+  {
+    "id": 5,
+    "name": "Twenty",
+    "hint": "twenty.com (open-source CRM)",
+    "category": "CRM and Sales",
+    "pass1_claim": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2",
+        "JWT"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "evidence_urls": [
+      "https://docs.twenty.com/developers/extend/api",
+      "https://docs.twenty.com/developers/extend/oauth",
+      "https://twentyhq-twenty.mintlify.app/developers/api/authentication",
+      "https://docs.twenty.com/user-guide/getting-started/how-tos/create-workspace.md",
+      "https://twenty.com/pricing"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "paid_plan_gated",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "human_notes": "twenty.com/pricing: cloud API access is a Pro/Organization ($9-19/user/mo) feature, no free-tier API mentioned -- paid_plan_gated is more accurate than final's free_self_serve (self-hosting the OSS project is free, but that's a different path). mcp_exists=true confirmed ('every Cloud workspace ships with a native MCP server') -- pass1 had this wrong as false, final correctly fixed it."
+  },
+  {
+    "id": 12,
+    "name": "Intercom",
+    "hint": "intercom.com",
+    "category": "Support and Helpdesk",
+    "pass1_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://developers.intercom.com/docs/build-an-integration/learn-more/authentication",
+      "https://developers.intercom.com/docs/build-an-integration/learn-more/authentication/setting-up-oauth",
+      "https://intercom-developer-hub.readme.io/docs/personal-access-tokens-1",
+      "https://developers.intercom.com/docs/build-an-integration/getting-started"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "human_notes": "Confirmed via developers.intercom.com: access token issued immediately on app creation, no approval step. Matches final_claim exactly on every field -- no miss here."
+  },
+  {
+    "id": 14,
+    "name": "Front",
+    "hint": "front.com",
+    "category": "Support and Helpdesk",
+    "pass1_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "API Key"
+      ],
+      "self_serve": "paid_plan_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://dev.frontapp.com/me/docs/authentication",
+      "https://dev.frontapp.com/docs/oauth",
+      "https://dev.frontapp.com/docs/welcome",
+      "https://help.front.com/en/articles/2331",
+      "https://dev.frontapp.com/me/docs/create-and-manage-apps",
+      "https://help.front.com/en/articles/4883136"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "human_notes": "dev.frontapp.com confirms a free developer environment with immediate access -- final_claim's free_self_serve is correct and pass1's paid_plan_gated was wrong. Verification loop caught and fixed a real pass-1 mistake here."
+  },
+  {
+    "id": 15,
+    "name": "Pylon",
+    "hint": "usepylon.com",
+    "category": "Support and Helpdesk",
+    "pass1_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "admin_approval_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://docs.usepylon.com/pylon-docs/developer/api/authentication",
+      "https://support.usepylon.com/articles/2407390554-connecting-to-the-pylon-mcp-server",
+      "https://docs.usepylon.com/pylon-docs/developer/api",
+      "https://support.usepylon.com/articles/4735104435-how-do-i-create-an-api-token",
+      "https://docs.usepylon.com/pylon-docs/integrations/pylon-mcp.md"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "admin_approval_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": true
+    },
+    "human_notes": "docs.usepylon.com confirms 'Only Admin users can create API tokens' -- final's admin_approval_gated is correct (pass1 said unknown). BUT support.usepylon.com confirms an official, actively-maintained MCP server at mcp.usepylon.com -- final's mcp_exists=false is WRONG; pass1's true was right. Net: verification loop fixed self_serve but broke mcp_exists."
+  },
+  {
+    "id": 18,
+    "name": "Help Scout",
+    "hint": "helpscout.com",
+    "category": "Support and Helpdesk",
+    "pass1_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "Basic Auth",
+        "API Key"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "unknown",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "Basic Auth"
+      ],
+      "self_serve": "paid_plan_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://developer.helpscout.com/mailbox-api/overview/authentication/",
+      "https://developer.helpscout.com/docs-api/",
+      "https://docs.helpscout.com/article/499-manage-your-user-profile"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "OAuth2"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "human_notes": "developer.helpscout.com/mailbox-api explicitly states the API does NOT support Basic Auth or API keys -- only OAuth2. Both pass1 (added API Key) and final (kept Basic Auth) got auth_methods wrong. self_serve is a judgment call (free trial, not a permanently free tier); final's paid_plan_gated is close but trial_self_serve is more precise."
+  },
+  {
+    "id": 28,
+    "name": "WhatsApp Business",
+    "hint": "developers.facebook.com/docs/whatsapp",
+    "category": "Communications and Messaging",
+    "pass1_claim": {
+      "auth_methods": [
+        "Unknown"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2",
+        "Other"
+      ],
+      "self_serve": "paid_plan_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://developers.facebook.com/docs/whatsapp/",
+      "https://developers.facebook.com/docs/whatsapp/cloud-api/get-started",
+      "https://developers.facebook.com/docs/whatsapp/pricing/",
+      "https://github.com/lharries/whatsapp-mcp",
+      "https://github.com/FredShred7/whatsapp-mcp-server",
+      "https://github.com/universal-mcp/whatsapp"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2",
+        "Other"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "human_notes": "developers.facebook.com confirms self-serve app creation and test messaging without upfront partner approval, though scaled production use needs business verification -- trial_self_serve fits better than final's paid_plan_gated. mcp_exists correctly false: only unofficial community wrapper repos exist (github.com/lharries/whatsapp-mcp etc.), which the tightened criteria correctly excluded."
+  },
+  {
+    "id": 29,
+    "name": "Aircall",
+    "hint": "aircall.io",
+    "category": "Communications and Messaging",
+    "pass1_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "Basic Auth"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "Basic Auth"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://support.aircall.io/en-gb/articles/10375355327517",
+      "https://support.aircall.io/en-gb/articles/10375395181853",
+      "https://developer.aircall.io/api-references/",
+      "https://aircall.io/en-gb/c/free-trial/",
+      "https://aircall.io/pricing/",
+      "https://support.aircall.io/en-gb/articles/15149698584733"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "OAuth2",
+        "Basic Auth"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "human_notes": "developer.aircall.io confirms OAuth2 (partners) + Basic Auth (customers), matching final exactly. aircall.io/pricing shows API access on the Essentials paid tier, but a free-trial path exists -- trial_self_serve (final's claim) is a reasonable read. Good match overall."
+  },
+  {
+    "id": 30,
+    "name": "Vonage",
+    "hint": "developer.vonage.com",
+    "category": "Communications and Messaging",
+    "pass1_claim": {
+      "auth_methods": [
+        "Basic Auth",
+        "JWT",
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Basic Auth",
+        "API Key",
+        "JWT",
+        "OAuth2",
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://developer.vonage.com/en/getting-started/concepts/authentication",
+      "https://developer.vonage.com/en/verify/concepts/authentication",
+      "https://developer.vonage.com/en/vonage-business-cloud/getting-started/create-an-access-token",
+      "https://developer.vonage.com/en/dashboard/build/applications"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Basic Auth",
+        "API Key",
+        "JWT",
+        "OAuth2",
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "human_notes": "developer.vonage.com confirms API key+secret and JWT auth, and that credentials are created automatically on account signup -- matches final_claim closely. Good match."
+  },
+  {
+    "id": 32,
+    "name": "Meta Ads",
+    "hint": "developers.facebook.com/docs/marketing-apis",
+    "category": "Marketing, Ads, Email and Social",
+    "pass1_claim": {
+      "auth_methods": [
+        "Token/Bearer"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "unknown",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "unknown",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://developers.facebook.com/documentation/ads-commerce/marketing-api/get-started/authentication/",
+      "https://github.com/facebook/facebook-php-ads-sdk",
+      "https://developers.facebook.com/documentation/development/create-an-app/marketing-api-use-cases/"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "human_notes": "developers.facebook.com confirms self-serve token generation via Graph API Explorer / system users with NO mention of app review being required just to get a token -- both passes' 'unknown' for self_serve and buildability was avoidably vague given this. A real miss shared by both passes (agreement is not correctness)."
+  },
+  {
+    "id": 36,
+    "name": "Klaviyo",
+    "hint": "developers.klaviyo.com",
+    "category": "Marketing, Ads, Email and Social",
+    "pass1_claim": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "paid_plan_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "API Key",
+        "Other"
+      ],
+      "self_serve": "paid_plan_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://developers.klaviyo.com/en/docs/authenticate_",
+      "https://developers.klaviyo.com/en/v2025-01-15/docs/set_up_oauth",
+      "https://developers.klaviyo.com/en/v2023-12-15/docs/retrieve_api_credentials",
+      "https://developers.klaviyo.com/en/v2025-01-15/docs/set_up_oauth"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "OAuth2",
+        "API Key",
+        "Other"
+      ],
+      "self_serve": "admin_approval_gated",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "human_notes": "developers.klaviyo.com confirms API key management requires an Owner/Admin/Manager role -- that's role-based gating, not plan-based. Both passes said paid_plan_gated; admin_approval_gated is more precise. Another shared miss."
+  },
+  {
+    "id": 55,
+    "name": "Apify",
+    "hint": "docs.apify.com",
+    "category": "Data, SEO and Scraping",
+    "pass1_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2",
+        "Other"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": true
+    },
+    "evidence_urls": [
+      "https://docs.apify.com/api/v2",
+      "https://pr-1615.preview.docs.apify.com/api/v2/getting-started",
+      "https://docs.apify.com/platform/integrations/mcp.md",
+      "https://docs.apify.com/platform/integrations/agent-onboarding",
+      "https://docs.apify.com/api/v2.md"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "human_notes": "docs.apify.com confirms an official MCP server at mcp.apify.com and OAuth/token auth. Apify's known free-credits tier supports free_self_serve. pass1's buildable_today looks more accurate than final's downgrade to buildable_with_caveats -- given a working official MCP server and simple token auth, 'with caveats' seems like an unnecessary downgrade."
+  },
+  {
+    "id": 65,
+    "name": "Supabase",
+    "hint": "supabase.com/docs",
+    "category": "Developer, Infra and Data platforms",
+    "pass1_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "Token/Bearer",
+        "API Key",
+        "Other"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "API Key",
+        "Token/Bearer",
+        "OAuth2",
+        "JWT"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://supabase.com/docs/guides/api/creating-routes",
+      "https://supabase.com/docs/guides/auth/jwts",
+      "https://supabase.com/docs/reference/api/rest-api",
+      "https://supabase.com/docs/guides/ai-tools/mcp"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "API Key",
+        "Token/Bearer",
+        "OAuth2",
+        "JWT"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "human_notes": "Supabase has a genuinely free (not just trial) tier -- free_self_serve is more accurate than final's 'unknown'. More importantly: supabase.com/docs/guides/ai-tools/mcp confirms an official, first-party MCP server (mcp.supabase.com, official GitHub org) -- final's mcp_exists=false is a clear miss; pass1 had this right."
+  },
+  {
+    "id": 70,
+    "name": "Sentry",
+    "hint": "docs.sentry.io/api",
+    "category": "Developer, Infra and Data platforms",
+    "pass1_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://docs.sentry.io/api/auth/",
+      "https://docs.sentry.io/api/requests/",
+      "https://sentry.io/signup/"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "human_notes": "docs.sentry.io confirms self-serve auth token creation with a genuine free tier -- free_self_serve fits better than final's trial_self_serve. docs.sentry.io/product/sentry-mcp redirects to the official first-party domain mcp.sentry.dev (content didn't render for direct confirmation, so flagging lower confidence), which strongly suggests mcp_exists should be true, not final's false -- consistent with the broader pattern of final under-counting mcp_exists."
+  },
+  {
+    "id": 72,
+    "name": "Airtable",
+    "hint": "airtable.com/developers",
+    "category": "Productivity and Project Management",
+    "pass1_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://airtable.com/developers/web/api/authentication",
+      "https://airtable.com/developers/web/guides/personal-access-tokens",
+      "https://airtable.com/developers/web/guides/oauth-integrations",
+      "https://airtable.com/developers/web/api/oauth-reference",
+      "https://airtable.com/pricing"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "human_notes": "airtable.com/developers confirms self-serve personal access tokens and OAuth, matching final exactly. final's upgrade from pass1's buildable_with_caveats to buildable_today looks correct given how straightforward self-serve auth is here -- a genuine improvement from the verification loop."
+  },
+  {
+    "id": 76,
+    "name": "Monday.com",
+    "hint": "developer.monday.com",
+    "category": "Productivity and Project Management",
+    "pass1_claim": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2",
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "evidence_urls": [
+      "https://developer.monday.com/api-reference/docs/authentication",
+      "https://developer.monday.com/apps/docs/choosing-auth",
+      "https://developer.monday.com/apps/docs/oauth",
+      "https://developer.monday.com/api-reference/docs/the-developer-center"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "human_notes": "developer.monday.com confirms personal API tokens and an official 'Platform MCP for monday.com' with dedicated security docs -- matches final_claim closely on every field. Good match."
+  },
+  {
+    "id": 78,
+    "name": "Coda",
+    "hint": "coda.io/developers",
+    "category": "Productivity and Project Management",
+    "pass1_claim": {
+      "auth_methods": [
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "unknown",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://coda.io/packs/build/latest/guides/basics/authentication/",
+      "https://coda.io/packs/build/latest/reference/sdk/core/interfaces/HeaderBearerTokenAuthentication/",
+      "https://coda.io/packs/build/latest/reference/sdk/core/interfaces/CodaApiBearerTokenAuthentication/",
+      "https://coda.io/apis/v1/openapi.yaml",
+      "https://coda.io/@oleg/getting-started-guide-coda-api/start-here-5"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "human_notes": "coda.io confirms bearer-token auth (self-serve). No independent evidence found of an official Coda MCP server, so final's correction from pass1's true to false looks right here -- a case where the tightened mcp_exists criteria fixed a real false positive rather than introducing a false negative."
+  },
+  {
+    "id": 82,
+    "name": "Plaid",
+    "hint": "plaid.com/docs",
+    "category": "Finance and Fintech",
+    "pass1_claim": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://plaid.com/docs/api/index.html.md",
+      "https://plaid.com/docs/api/oauth/",
+      "https://plaid.com/docs/resources/mcp/index.html.md",
+      "https://plaid.com/docs/account/billing/"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "API Key",
+        "OAuth2"
+      ],
+      "self_serve": "trial_self_serve",
+      "buildability_verdict": "buildable_with_caveats",
+      "mcp_exists": true
+    },
+    "human_notes": "plaid.com confirms a free Sandbox tier (trial_self_serve) and a real, official MCP server -- though Plaid's own docs call it 'under active development... limited support', i.e. experimental. That nuance makes mcp_exists genuinely borderline; leaning true since it is official and working today, but flagging low confidence. final's false continues the broader under-counting pattern seen on Pylon/Supabase/Sentry."
+  },
+  {
+    "id": 87,
+    "name": "Xero",
+    "hint": "developer.xero.com",
+    "category": "Finance and Fintech",
+    "pass1_claim": {
+      "auth_methods": [
+        "OAuth2"
+      ],
+      "self_serve": "unknown",
+      "buildability_verdict": "unknown",
+      "mcp_exists": false
+    },
+    "final_claim": {
+      "auth_methods": [
+        "OAuth2",
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "evidence_urls": [
+      "https://developer.xero.com/faq/getting-started",
+      "https://developer.xero.com/documentation/guides/oauth2/token-types/",
+      "https://developer.xero.com/pricing",
+      "https://developer.xero.com/custom-development",
+      "https://developer.xero.com/faq/custom-integration"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "OAuth2",
+        "Token/Bearer"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": false
+    },
+    "human_notes": "Xero's developer signup is well-established as free self-serve (create a free developer account, get a demo company, no payment needed to build and test). final correctly resolved both self_serve and buildability_verdict from pass1's 'unknown' -- a clean win for the verification loop."
+  },
+  {
+    "id": 95,
+    "name": "Reducto",
+    "hint": "reducto.ai (document parsing)",
+    "category": "AI, Research and Media-native",
+    "pass1_claim": {
+      "auth_methods": [
+        "API Key",
+        "Token/Bearer",
+        "OAuth2"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "final_claim": {
+      "auth_methods": [
+        "Token/Bearer",
+        "Other"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "evidence_urls": [
+      "https://docs.reducto.ai/agent-guide",
+      "https://docs.reducto.ai/quickstart",
+      "https://docs.reducto.ai/onprem/security_model",
+      "https://docs.reducto.ai/onprem/securing_reducto",
+      "https://docs.reducto.ai/mcp-server"
+    ],
+    "human_verdict": {
+      "auth_methods": [
+        "Token/Bearer",
+        "Other"
+      ],
+      "self_serve": "free_self_serve",
+      "buildability_verdict": "buildable_today",
+      "mcp_exists": true
+    },
+    "human_notes": "docs.reducto.ai confirms bearer-token auth (with an OAuth device-flow option) and an official, current MCP server -- matches final_claim closely on every field. Good match."
+  }
+]

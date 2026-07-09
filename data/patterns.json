@@ -1,0 +1,146 @@
+{
+  "total_apps": 100,
+  "researched_ok": 100,
+  "failed_outright": 0,
+  "failed_apps": [],
+  "auth_method_distribution": {
+    "OAuth2": 77,
+    "Token/Bearer": 64,
+    "API Key": 45,
+    "Basic Auth": 20,
+    "Other": 18,
+    "Unknown": 6,
+    "None / Public": 4,
+    "JWT": 4
+  },
+  "self_serve_distribution": {
+    "free_self_serve": 43,
+    "unknown": 22,
+    "trial_self_serve": 15,
+    "paid_plan_gated": 13,
+    "admin_approval_gated": 6,
+    "partner_contact_sales": 1
+  },
+  "buildability_distribution": {
+    "buildable_with_caveats": 49,
+    "buildable_today": 38,
+    "unknown": 13
+  },
+  "most_common_blockers": [
+    [
+      "Other",
+      28
+    ],
+    [
+      "OAuth consent & credential lifecycle",
+      7
+    ],
+    [
+      "Paid plan required for API access",
+      2
+    ],
+    [
+      "Rate limits / usage quotas",
+      1
+    ]
+  ],
+  "mcp_already_exists_count": 23,
+  "category_summary": {
+    "CRM and Sales": {
+      "total": 10,
+      "self_serve_pct": 0.7,
+      "gated_pct": 0.1,
+      "unknown_pct": 0.2,
+      "buildable_today_count": 5
+    },
+    "Support and Helpdesk": {
+      "total": 10,
+      "self_serve_pct": 0.5,
+      "gated_pct": 0.4,
+      "unknown_pct": 0.1,
+      "buildable_today_count": 4
+    },
+    "Communications and Messaging": {
+      "total": 10,
+      "self_serve_pct": 0.7,
+      "gated_pct": 0.1,
+      "unknown_pct": 0.2,
+      "buildable_today_count": 5
+    },
+    "Marketing, Ads, Email and Social": {
+      "total": 10,
+      "self_serve_pct": 0.3,
+      "gated_pct": 0.4,
+      "unknown_pct": 0.3,
+      "buildable_today_count": 1
+    },
+    "Ecommerce": {
+      "total": 10,
+      "self_serve_pct": 0.3,
+      "gated_pct": 0.3,
+      "unknown_pct": 0.4,
+      "buildable_today_count": 3
+    },
+    "Data, SEO and Scraping": {
+      "total": 10,
+      "self_serve_pct": 0.7,
+      "gated_pct": 0.1,
+      "unknown_pct": 0.2,
+      "buildable_today_count": 2
+    },
+    "Developer, Infra and Data platforms": {
+      "total": 10,
+      "self_serve_pct": 0.6,
+      "gated_pct": 0.0,
+      "unknown_pct": 0.4,
+      "buildable_today_count": 5
+    },
+    "Productivity and Project Management": {
+      "total": 10,
+      "self_serve_pct": 0.8,
+      "gated_pct": 0.1,
+      "unknown_pct": 0.1,
+      "buildable_today_count": 5
+    },
+    "Finance and Fintech": {
+      "total": 10,
+      "self_serve_pct": 0.5,
+      "gated_pct": 0.4,
+      "unknown_pct": 0.1,
+      "buildable_today_count": 3
+    },
+    "AI, Research and Media-native": {
+      "total": 10,
+      "self_serve_pct": 0.7,
+      "gated_pct": 0.1,
+      "unknown_pct": 0.2,
+      "buildable_today_count": 5
+    }
+  },
+  "easy_wins": [
+    "HubSpot",
+    "Pipedrive",
+    "Twenty",
+    "Podio",
+    "Intercom",
+    "Slack",
+    "Discord",
+    "Telegram",
+    "Vonage",
+    "WooCommerce",
+    "Gumroad",
+    "Sherlock",
+    "GitHub",
+    "Airtable",
+    "Linear",
+    "Monday.com",
+    "Coda",
+    "Stripe",
+    "Xero",
+    "Fathom",
+    "Reducto",
+    "Devin",
+    "YouTube Transcript"
+  ],
+  "easy_win_count": 23
+}

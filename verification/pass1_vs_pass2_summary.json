@@ -1,0 +1,11 @@
+{
+  "total_apps": 100,
+  "apps_with_pass1_pass2_disagreement": 81,
+  "agreement_rate": 0.19,
+  "field_disagreement_counts": {
+    "self_serve": 50,
+    "buildability_verdict": 58,
+    "api_surface.mcp_exists": 26,
+    "auth_methods": 4
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "sample_size": 20,
+  "pass1_only": {
+    "overall_accuracy": 0.6,
+    "checked": 80,
+    "per_field": {
+      "auth_methods": {
+        "accuracy": 0.4,
+        "correct": 8,
+        "total": 20
+      },
+      "self_serve": {
+        "accuracy": 0.45,
+        "correct": 9,
+        "total": 20
+      },
+      "buildability_verdict": {
+        "accuracy": 0.65,
+        "correct": 13,
+        "total": 20
+      },
+      "mcp_exists": {
+        "accuracy": 0.9,
+        "correct": 18,
+        "total": 20
+      }
+    }
+  },
+  "final_after_verification": {
+    "overall_accuracy": 0.8,
+    "checked": 80,
+    "per_field": {
+      "auth_methods": {
+        "accuracy": 0.95,
+        "correct": 19,
+        "total": 20
+      },
+      "self_serve": {
+        "accuracy": 0.6,
+        "correct": 12,
+        "total": 20
+      },
+      "buildability_verdict": {
+        "accuracy": 0.85,
+        "correct": 17,
+        "total": 20
+      },
+      "mcp_exists": {
+        "accuracy": 0.8,
+        "correct": 16,
+        "total": 20
+      }
+    }
+  },
+  "accuracy_delta": 0.2
+}
